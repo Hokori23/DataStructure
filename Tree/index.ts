@@ -31,6 +31,11 @@ export class TreeNode {
 		}
 		return traverse(new TreeNode(arr.shift()), arr)
 	}
+	setNull(): void {
+		this.parent = null
+		this.value = null
+		this.child = null
+	}
 	getParent(): TreeNode | null {
 		return this.parent
 	}
@@ -97,7 +102,7 @@ export class TreeNode {
 	 * 层级遍历
 	 */
 	levelTraversal(): any[] {
-		console.log('LevelTraversal');
+		console.log('LevelTraversal')
 		const nodeStack = [this as TreeNode]
 		const res = []
 		while (nodeStack.length) {
@@ -112,7 +117,7 @@ export class TreeNode {
 						nodeStack.push(child)
 					})
 			}
-			console.log(level.join(', '));
+			console.log(level.join(', '))
 			res.push(level)
 		}
 		return res
@@ -121,7 +126,7 @@ export class TreeNode {
 	 * 前序遍历
 	 */
 	preTraversal(): any[] {
-		console.log('PreTraversal');
+		console.log('PreTraversal')
 		const nodeStack = [this as TreeNode]
 		const res = []
 		while (nodeStack.length) {

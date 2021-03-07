@@ -15,8 +15,8 @@ export class QueueByStack {
 	}
 	setNull(): void {
 		this.queue = new Array(this.size)
-		this.front = null
-		this.rear = null
+		this.front = 0
+		this.rear = 0
 	}
 	isEmpty(): boolean {
 		return this.front === this.rear
@@ -89,8 +89,8 @@ export class CircularQueueByStack {
  */
 class Node {
 	value: any
-	next: Node | null
-	constructor(value: any, next: Node | null = null) {
+	next: Node | null = null
+	constructor(value: any, next?: Node | null) {
 		this.value = value
 		if (next) this.next = next
 	}
@@ -105,22 +105,22 @@ export class CircularQueueByLinkList {
 		return this.front === this.rear
 	}
 	push(value: any): void {
-    const rear = new Node(value)
-    this.rear.next = rear
-    this.rear = rear
-  }
+		const rear = new Node(value)
+		;(this.rear as Node).next = rear
+		this.rear = rear
+	}
 	pop(): Node | null {
 		if (this.isEmpty()) return null
-    this.front = this.front.next
-    return this.front
-  }
-	getFront(): any {
-		if (this.isEmpty()) return undefined
-    return this.front.next
+		this.front = (this.front as Node).next
+		return this.front
 	}
-	getRear(): any {
-		if (this.isEmpty()) return undefined
-    return this.rear
+	getFront(): Node | null {
+		if (this.isEmpty()) return null
+		return this.front
+	}
+	getRear(): Node | null {
+		if (this.isEmpty()) return null
+		return this.rear
 	}
 }
 

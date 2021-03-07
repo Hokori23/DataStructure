@@ -27,32 +27,32 @@ class TreeNode {
 	}
 	preOrderTraversal(): void {
 		const nodeStack = [this as TreeNode]
-		const res = []
+		const res: any[] = []
 		while (nodeStack.length) {
 			const node = nodeStack.pop()
-			res.push(node.value || 'NULL')
-			if (node.right) nodeStack.push(node.right)
-			if (node.left) nodeStack.push(node.left)
+			res.push(node?.value || 'NULL')
+			if (node?.right) nodeStack.push(node.right)
+			if (node?.left) nodeStack.push(node.left)
 		}
 		console.log(res.join(', '))
 	}
 	inOrderTraversal(): void {
-		const nodeStack = []
-		let root = this as TreeNode
-		const res = []
+		const nodeStack: TreeNode[] = []
+		let root: TreeNode | null | undefined = this as TreeNode
+		const res: any[] = []
 		while (root || nodeStack.length) {
 			while (root) {
 				nodeStack.push(root)
 				root = root.left
 			}
 			root = nodeStack.pop()
-			res.push(root.value || 'NULL')
-			root = root.right
+			res.push(root?.value || 'NULL')
+			root = root?.right
 		}
 		console.log(res.join(', '))
 	}
 	postOrderTraversal(): void {
-		const traverse = (root: TreeNode, res = []): any[] => {
+		const traverse = (root: TreeNode | null, res:any[] = []): any[] => {
 			if (!root) return res
 			res = traverse(root.left, res)
 			res = traverse(root.right, res)
@@ -60,7 +60,7 @@ class TreeNode {
 			return res
 		}
 		const res = traverse(this as TreeNode, [])
-    console.log(res.join(', '));
+		console.log(res.join(', '))
 	}
 }
 let arr = [

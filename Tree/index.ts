@@ -2,7 +2,7 @@ import { isFlat } from '../utils'
 export class TreeNode {
 	value: any
 	parent: TreeNode | null = null
-	child: TreeNode[] = []
+	child: TreeNode[] | null = null
 	constructor(value: any, parent?: TreeNode | null, child?: TreeNode[]) {
 		this.value = value
 		if (parent) this.parent = parent
@@ -11,7 +11,7 @@ export class TreeNode {
 	static create(arr: any[]): TreeNode | null {
 		const traverse = (root: TreeNode, childArr?: any[]) => {
 			if (!childArr) return root
-			const newChild: TreeNode[] = []
+			const newChild = []
 			childArr.forEach((child) => {
 				if (Array.isArray(child)) {
 					if (isFlat(child)) {
@@ -34,20 +34,19 @@ export class TreeNode {
 	setNull(): void {
 		this.parent = null
 		this.value = null
-		this.child = []
+		this.child = null
 	}
 	getParent(): TreeNode | null {
 		return this.parent
 	}
 	getRoot(): TreeNode | null {
 		let parent = this.parent
-		while (parent?.parent) {
+		while (parent.parent) {
 			parent = parent.parent
 		}
 		return parent
 	}
 	rightSibling(): TreeNode | null {
-		if (!this.parent) return null
 		const siblings = this.parent.child
 		const length = siblings.length
 		for (var i = 0; i < length; i++) {
@@ -58,10 +57,8 @@ export class TreeNode {
 				return siblings[i + 1]
 			}
 		}
-		return null
 	}
 	leftSibling(): TreeNode | null {
-		if (!this.parent) return null
 		const siblings = this.parent.child
 		const length = siblings.length
 		for (var i = 0; i < length; i++) {
@@ -72,18 +69,15 @@ export class TreeNode {
 				return siblings[i - 1]
 			}
 		}
-		return null
 	}
-	deleteChild(): boolean {
-		if (!this.parent) return false
+	deleteChild(): void {
 		const siblings = this.parent.child
 		for (var i = 0; i < siblings.length; i++) {
 			if (siblings[i] === this) {
 				siblings.splice(i, 1)
-				return true
+				return
 			}
 		}
-		return false
 	}
 	/**
 	 *
@@ -107,18 +101,18 @@ export class TreeNode {
 	/**
 	 * 层级遍历
 	 */
-	levelOrderTraversal(): any[] {
+	levelTraversal(): any[] {
 		console.log('LevelTraversal')
 		const nodeStack = [this as TreeNode]
-		const res: any[] = []
+		const res = []
 		while (nodeStack.length) {
-			const level: any[] = []
+			const level = []
 			const length = nodeStack.length
 			let verbose = ''
 			for (var i = 0; i < length; i++) {
 				const node = nodeStack.shift()
-				level.push(node?.value || 'NULL')
-				node?.child &&
+				level.push(node.value)
+				node.child &&
 					node.child.forEach((child) => {
 						nodeStack.push(child)
 					})
@@ -131,14 +125,14 @@ export class TreeNode {
 	/**
 	 * 前序遍历
 	 */
-	preOrderTraversal(): any[] {
+	preTraversal(): any[] {
 		console.log('PreTraversal')
 		const nodeStack = [this as TreeNode]
-		const res: any[] = []
+		const res = []
 		while (nodeStack.length) {
 			const node = nodeStack.pop()
-			res.push(node?.value || 'NULL')
-			if (node?.child) {
+			res.push(node.value)
+			if (node.child) {
 				for (let i = node.child.length - 1; i > -1; i--) {
 					nodeStack.push(node.child[i])
 				}
@@ -173,6 +167,6 @@ const arr = [6, [11, [4, [5, 12]]], [2, [6, 1]], [5, [3, 9]]]
 // 		[3, 9]
 // 	]
 // ]
-const tree = TreeNode.create(arr) as TreeNode
-tree.levelOrderTraversal()
-tree.preOrderTraversal()
+const tree = TreeNode.create(arr)
+tree.levelTraversal()
+tree.preTraversal()

@@ -1,4 +1,4 @@
-class TreeNode {
+export class TreeNode {
 	value: any
 	left: TreeNode | null
 	right: TreeNode | null
@@ -12,7 +12,11 @@ class TreeNode {
 		this.right = right
 	}
 	static create(arr: any[]) {
-		const traverse = (arr: any[], arrLength: number, index: number) => {
+		const traverse = (
+			arr: any[],
+			arrLength: number,
+			index: number
+		): TreeNode | null => {
 			if (index >= arrLength) {
 				return null
 			}
@@ -25,7 +29,7 @@ class TreeNode {
 		}
 		return traverse(arr, arr.length, 0)
 	}
-	preOrderTraversal(): void {
+	preOrderTraversal(): any[] {
 		const nodeStack = [this as TreeNode]
 		const res: any[] = []
 		while (nodeStack.length) {
@@ -34,9 +38,9 @@ class TreeNode {
 			if (node?.right) nodeStack.push(node.right)
 			if (node?.left) nodeStack.push(node.left)
 		}
-		console.log(res.join(', '))
+		return res
 	}
-	inOrderTraversal(): void {
+	inOrderTraversal(): any[] {
 		const nodeStack: TreeNode[] = []
 		let root: TreeNode | null | undefined = this as TreeNode
 		const res: any[] = []
@@ -49,38 +53,17 @@ class TreeNode {
 			res.push(root?.value || 'NULL')
 			root = root?.right
 		}
-		console.log(res.join(', '))
+		return res
 	}
-	postOrderTraversal(): void {
-		const traverse = (root: TreeNode | null, res:any[] = []): any[] => {
+	postOrderTraversal(): any[] {
+		const traverse = (root: TreeNode | null, res: any[] = []): any[] => {
 			if (!root) return res
 			res = traverse(root.left, res)
 			res = traverse(root.right, res)
 			res.push(root.value || 'NULL')
 			return res
 		}
-		const res = traverse(this as TreeNode, [])
-		console.log(res.join(', '))
+		const res = traverse(this as TreeNode)
+		return res
 	}
 }
-let arr = [
-	'A',
-	'B',
-	'C',
-	'D',
-	null,
-	'F',
-	'G',
-	'H',
-	'I',
-	null,
-	null,
-	'L',
-	'M',
-	'N',
-	'O'
-]
-const root = TreeNode.create(arr)
-root.preOrderTraversal()
-root.inOrderTraversal()
-root.postOrderTraversal()

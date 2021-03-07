@@ -1,20 +1,37 @@
+import { isDef } from '../utils'
 export class LinkNode {
-	private value: any
-	private next: LinkNode | null
-	private pre: LinkNode | null
-	constructor(value: any, next: LinkNode | null, pre?: LinkNode | null) {
-		this.value = value || null
-		this.next = next || null
+	private value: any = null
+	private next: LinkNode | null = null
+	private pre: LinkNode | null = null
+	constructor(value: any, next?: LinkNode | null, pre?: LinkNode | null) {
+		this.value = value
+		if (next !== undefined) this.next = next
 		if (pre !== undefined) this.pre = pre
 	}
 	public getValue(): any {
 		return this.value
 	}
-	public getNext(): LinkNode {
+	public getNext(): LinkNode | null {
 		return this.next
 	}
-	public getPre(): LinkNode {
+	/**
+	 * @description 只有双向链表这个方法才有意义
+	 */
+	public getPre(): LinkNode | null {
 		return this.pre
+	}
+	getLast(isReverse: boolean = false): LinkNode | null {
+		let curr: LinkNode | null = this
+		if (isReverse) {
+			while (curr?.pre) {
+				curr = curr.getPre()
+			}
+		} else {
+			while (curr?.next) {
+				curr = curr.getNext()
+			}
+		}
+		return curr
 	}
 	public setValue(value: any): void {
 		this.value = value
@@ -27,11 +44,11 @@ export class LinkNode {
 	}
 	static create(
 		arr: any[],
-		isUnidireactional: boolean = true
+		isUnidireactional: boolean = true // 单向链表
 	): LinkNode | null {
 		const length = arr.length
 		if (!length) return null
-		
+
 		const last = new LinkNode(arr[length - 1], null, null)
 		let curr = last
 		let idx = length - 2
@@ -53,7 +70,7 @@ export class LinkNode {
 	}
 	find(idx: number): LinkNode | null {
 		let currIdx = 0
-		let curr: LinkNode = this
+		let curr: LinkNode | null = this
 		while (curr) {
 			if (currIdx === idx) {
 				return curr
@@ -63,8 +80,8 @@ export class LinkNode {
 		}
 		return null
 	}
-	insert(value: any, idx: number): boolean {
-		const pre = this.find(idx - 1)
+	insert(value: any, idx?: number): boolean {
+		const pre = isDef(idx) ? this.find((idx as number) - 1) : this.getLast()
 		if (!pre) {
 			// error idx
 			return false
@@ -82,51 +99,20 @@ export class LinkNode {
 		pre.next = pre.next.next
 		return true
 	}
-	print(isReverse?: boolean): void {
-		let res = ''
-		let curr: LinkNode = this
+	traverse(isReverse?: boolean): any[] {
+		const res: any[] = []
+		let curr: LinkNode | null = this
 		if (isReverse) {
 			while (curr) {
-				res += curr.getValue()
+				res.push(curr.getValue())
 				curr = curr.getPre()
 			}
 		} else {
 			while (curr) {
-				res += curr.getValue()
+				res.push(curr.getValue())
 				curr = curr.getNext()
 			}
 		}
-		console.log(res)
+		return res
 	}
-	getLast(isReverse?: boolean): LinkNode {
-		let curr: LinkNode = this
-		if (isReverse) {
-			while (curr.pre) {
-				curr = curr.getPre()
-			}
-		} else {
-			while (curr.next) {
-				curr = curr.getNext()
-			}
-		}
-		return curr
-	}
-}
-
-export const demo = () => {
-	const arr = [1, 2, 3, 4, 5]
-	const head = LinkNode.create(arr, false)
-	console.log('-- print')
-	head.print()
-	let last = head.getLast()
-	console.log('\n-- print reverse')
-	last.print(true)
-	console.log('\n-- insert 6 into the position of index 3')
-	head.insert(6, 3)
-	console.log('\n-- print')
-	head.print()
-	console.log('\n-- delete the value from the position of index 4')
-	head.delete(4)
-	console.log('\n-- print')
-	head.print()
 }

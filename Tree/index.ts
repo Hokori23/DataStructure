@@ -101,7 +101,7 @@ export class TreeNode {
 	/**
 	 * 层级遍历
 	 */
-	levelTraversal(): any[] {
+	levelOrderTraversal(): any[] {
 		console.log('LevelTraversal')
 		const nodeStack = [this as TreeNode]
 		const res = []
@@ -125,7 +125,7 @@ export class TreeNode {
 	/**
 	 * 前序遍历
 	 */
-	preTraversal(): any[] {
+	preOrderTraversal(): any[] {
 		console.log('PreTraversal')
 		const nodeStack = [this as TreeNode]
 		const res = []
@@ -168,5 +168,5 @@ const arr = [6, [11, [4, [5, 12]]], [2, [6, 1]], [5, [3, 9]]]
 // 	]
 // ]
 const tree = TreeNode.create(arr)
-tree.levelTraversal()
-tree.preTraversal()
+tree.levelOrderTraversal()
+tree.preOrderTraversal()

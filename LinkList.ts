@@ -27,7 +27,7 @@ export class LinkNode {
 	}
 	static create(
 		arr: any[],
-		isUnidireactional: boolean = true
+		isUnidireactional: boolean = true	// 单向链表
 	): LinkNode | null {
 		const length = arr.length
 		if (!length) return null

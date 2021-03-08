@@ -1,4 +1,4 @@
-class TreeNode {
+export class TreeNode {
 	value: any
 	left: TreeNode | null
 	right: TreeNode | null
@@ -12,31 +12,35 @@ class TreeNode {
 		this.right = right
 	}
 	static create(arr: any[]) {
-		const traverse = (arr: any[], arrLength: number, index: number) => {
+		const recur = (
+			arr: any[],
+			arrLength: number,
+			index: number
+		): TreeNode | null => {
 			if (index >= arrLength) {
 				return null
 			}
 			const root = new TreeNode(
 				arr[index],
-				traverse(arr, arrLength, 2 * index + 1),
-				traverse(arr, arrLength, 2 * index + 2)
+				recur(arr, arrLength, 2 * index + 1),
+				recur(arr, arrLength, 2 * index + 2)
 			)
 			return root
 		}
-		return traverse(arr, arr.length, 0)
+		return recur(arr, arr.length, 0)
 	}
-	preOrderTraversal(): void {
+	preOrderTraversal(): any[] {
 		const nodeStack = [this as TreeNode]
 		const res: any[] = []
 		while (nodeStack.length) {
 			const node = nodeStack.pop()
-			res.push(node?.value || 'NULL')
+			res.push(node?.value || null)
 			if (node?.right) nodeStack.push(node.right)
 			if (node?.left) nodeStack.push(node.left)
 		}
-		console.log(res.join(', '))
+		return res
 	}
-	inOrderTraversal(): void {
+	inOrderTraversal(): any[] {
 		const nodeStack: TreeNode[] = []
 		let root: TreeNode | null | undefined = this as TreeNode
 		const res: any[] = []
@@ -46,41 +50,43 @@ class TreeNode {
 				root = root.left
 			}
 			root = nodeStack.pop()
-			res.push(root?.value || 'NULL')
+			res.push(root?.value || null)
 			root = root?.right
 		}
-		console.log(res.join(', '))
+		return res
 	}
-	postOrderTraversal(): void {
-		const traverse = (root: TreeNode | null, res:any[] = []): any[] => {
+	postOrderTraversal(): any[] {
+		const traverse = (root: TreeNode | null, res: any[] = []): any[] => {
 			if (!root) return res
 			res = traverse(root.left, res)
 			res = traverse(root.right, res)
-			res.push(root.value || 'NULL')
+			res.push(root.value || null)
 			return res
 		}
-		const res = traverse(this as TreeNode, [])
-		console.log(res.join(', '))
+		const res = traverse(this as TreeNode)
+		return res
+	}
+	// 针对非重复结点的二叉树
+	static buildTreeByPreNInTraversal(
+		preOrder: any[],
+		inOrder: any[]
+	): TreeNode | null {
+		const map = new Map()
+		inOrder.forEach((v, i) => {
+			map.set(v, i)
+		})
+		const recur = (
+			rootIdx: number,
+			leftIdx: number,
+			rightIdx: number
+		): TreeNode | null => {
+			if (leftIdx > rightIdx) return null
+			const root = new TreeNode(preOrder[rootIdx])
+			const i = map.get(preOrder[rootIdx]) // 中序遍历根结点的下标
+			root.left = recur(rootIdx + 1, leftIdx, i - 1)
+			root.right = recur(rootIdx + 1 + i - leftIdx, i + 1, rightIdx) // i - leftIdx 指 中序遍历左子树的数量
+			return root
+		}
+		return recur(0, 0, preOrder.length - 1)
 	}
 }
-let arr = [
-	'A',
-	'B',
-	'C',
-	'D',
-	null,
-	'F',
-	'G',
-	'H',
-	'I',
-	null,
-	null,
-	'L',
-	'M',
-	'N',
-	'O'
-]
-const root = TreeNode.create(arr)
-root.preOrderTraversal()
-root.inOrderTraversal()
-root.postOrderTraversal()

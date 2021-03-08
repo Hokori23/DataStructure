@@ -42,9 +42,9 @@ describe('二叉树: BinaryTree', () => {
 				'D',
 				'H',
 				'I',
-				'NULL',
-				'NULL',
-				'NULL',
+				null,
+				null,
+				null,
 				'C',
 				'F',
 				'L',
@@ -62,9 +62,9 @@ describe('二叉树: BinaryTree', () => {
 				'D',
 				'I',
 				'B',
-				'NULL',
-				'NULL',
-				'NULL',
+				null,
+				null,
+				null,
 				'A',
 				'L',
 				'F',
@@ -79,8 +79,33 @@ describe('二叉树: BinaryTree', () => {
 	describe('#postOrderTraversal()', () => {
 		it('中序遍历', () => {
 			assert.deepStrictEqual(root.postOrderTraversal(), [
-        'H','I','D','NULL','NULL','NULL','B','L','M','F','N','O','G','C','A'
+				'H',
+				'I',
+				'D',
+				null,
+				null,
+				null,
+				'B',
+				'L',
+				'M',
+				'F',
+				'N',
+				'O',
+				'G',
+				'C',
+				'A'
 			])
+		})
+	})
+	describe('#buildTreeByPreNInTraversal()', () => {
+		it('通过前序遍历、中序遍历还原二叉树(针对非重复结点的二叉树)', () => {
+			const root = TreeNode.create(['A', 'B', 'C', 'D']) as TreeNode
+			const preOrder = root.preOrderTraversal()
+			const inOrder = root.inOrderTraversal()
+			assert.deepStrictEqual(
+				TreeNode.buildTreeByPreNInTraversal(preOrder, inOrder),
+				root
+			)
 		})
 	})
 })

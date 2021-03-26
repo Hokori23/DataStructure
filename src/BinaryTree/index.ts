@@ -29,6 +29,22 @@ export class TreeNode {
 		}
 		return recur(arr, arr.length, 0)
 	}
+	levelOrderTraversal(): any[] {
+		const nodeStack = [this as TreeNode]
+		const res: any[] = []
+		while (nodeStack.length) {
+			const level: any[] = []
+			const length = nodeStack.length
+			for (let i = 0; i < length; i++) {
+				const node = nodeStack.shift()
+				level.push(node?.value)
+				if (node?.left) nodeStack.push(node?.left)
+				if (node?.right) nodeStack.push(node?.right)
+			}
+			res.push(level)
+		}
+		return res
+	}
 	preOrderTraversal(): any[] {
 		const nodeStack = [this as TreeNode]
 		const res: any[] = []
@@ -76,7 +92,7 @@ export class TreeNode {
 			map.set(v, i)
 		})
 		const recur = (
-			rootIdx: number,
+			rootIdx: number, // 前序遍历根节点下标
 			leftIdx: number,
 			rightIdx: number
 		): TreeNode | null => {
@@ -88,5 +104,16 @@ export class TreeNode {
 			return root
 		}
 		return recur(0, 0, preOrder.length - 1)
+	}
+	static depth(root: TreeNode | null): number {
+		let h, lh, rh
+		if (!root) {
+			h = 0
+		} else {
+			lh = TreeNode.depth(root.left)
+			rh = TreeNode.depth(root.right)
+			h = lh >= rh ? lh + 1 : rh + 1
+		}
+		return h
 	}
 }

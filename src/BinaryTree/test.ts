@@ -34,6 +34,16 @@ describe('二叉树: BinaryTree', () => {
 			assert.deepStrictEqual(TreeNode.create(['A', 'B', 'C', 'D']), actualRoot)
 		})
 	})
+	describe('#levelOrderTraversal()', () => {
+		it('层级遍历', () => {
+			assert.deepStrictEqual(root.levelOrderTraversal(), [
+				['A'],
+				['B','C'],
+				['D', null, 'F', 'G'],
+				['H', 'I', null, null, 'L', 'M', 'N', 'O']
+			])
+		})
+	})
 	describe('#preOrderTraversal()', () => {
 		it('前序遍历', () => {
 			assert.deepStrictEqual(root.preOrderTraversal(), [
@@ -77,7 +87,7 @@ describe('二叉树: BinaryTree', () => {
 		})
 	})
 	describe('#postOrderTraversal()', () => {
-		it('中序遍历', () => {
+		it('后序遍历', () => {
 			assert.deepStrictEqual(root.postOrderTraversal(), [
 				'H',
 				'I',
@@ -105,6 +115,14 @@ describe('二叉树: BinaryTree', () => {
 			assert.deepStrictEqual(
 				TreeNode.buildTreeByPreNInTraversal(preOrder, inOrder),
 				root
+			)
+		})
+	})
+	describe('#depth()', () => {
+		it('获取二叉树的高度', () => {
+			assert.deepStrictEqual(
+				TreeNode.depth(root),
+				4
 			)
 		})
 	})

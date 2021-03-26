@@ -1,32 +1,36 @@
-import { isFlat } from '../utils'
+import { isFlat, isUndef } from '../utils'
 export class TreeNode {
-	value: any
+	value: any = null
 	parent: TreeNode | null = null
 	child: TreeNode[] = []
-	constructor(value: any, parent?: TreeNode | null, child?: TreeNode[]) {
-		this.value = value
-		if (parent) this.parent = parent
-		if (child) this.child = child
+	constructor(value?: any, parent?: TreeNode | null, child?: TreeNode[]) {
+		if (!isUndef(value)) this.value = value
+		if (!isUndef(parent)) this.parent = parent
+		if (!isUndef(child)) this.child = child
 	}
 	static create(arr: any[]): TreeNode | null {
 		const traverse = (root: TreeNode, childArr?: any[]) => {
 			if (!childArr) return root
-			const newChild: TreeNode[] = []
+			/**
+			 * childArr
+			 * [ [ 1, 2, 3 ] ]
+			 * [ [ 1, [ 2, 3 ] ] ]
+			 * [ [ 1, [ 2, 3 ] ], [ 4, [ 5, 6 ] ] ]
+			 */
 			childArr.forEach((child) => {
 				if (Array.isArray(child)) {
 					if (isFlat(child)) {
-						const parent: TreeNode = newChild[newChild.length - 1]
-						parent.child = child.map((v) => new TreeNode(v, parent))
+						const newChild = child.map((v: any) => new TreeNode(v, root))
+						root.child.push(...newChild)
 					} else {
 						const rootValue = child[0]
 						const children = child[1]
-						newChild.push(traverse(new TreeNode(rootValue, root), children))
+						root.child.push(traverse(new TreeNode(rootValue, root), children))
 					}
 				} else {
-					newChild.push(new TreeNode(child, root))
+					root.child.push(new TreeNode(child, root))
 				}
 			})
-			root.child = newChild
 			return root
 		}
 		return traverse(new TreeNode(arr.shift()), arr)
@@ -148,31 +152,7 @@ export class TreeNode {
 		return res
 	}
 }
-// const arr = [6, [1, [4, 5]], [2, [6, 1]], [5, [3, 9]]]
-const arr = [6, [11, [4, [5, 12]]], [2, [6, 1]], [5, [3, 9]]]
-// Tree:
-//        6
-//    1   2   5
-//   4 5 6 1 3 9
-// Tree:
-//        6
-//    11   2   5
-//   4  x 6 1 3 9
-//  5 12
-// =========================== //
-// Array:
-// [
-// 	6,
-// 	[1,
-// 		[4, 5
-// 	],
-// 	[2,
-// 		[6, 1]
-// 	],
-// 	[5,
-// 		[3, 9]
-// 	]
-// ]
-const tree = TreeNode.create(arr) as TreeNode
-tree.levelOrderTraversal()
-tree.preOrderTraversal()
+
+// const tree = TreeNode.create(arr) as TreeNode
+// tree.levelOrderTraversal()
+// tree.preOrderTraversal()
